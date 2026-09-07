@@ -1,8 +1,13 @@
 1. Using an example, explain the difference between Type I and Type II Errors in the context of Regular expressions.
 
+(https://www.youtube.com/watch?v=808M7q8QX0E&t=626s)
+False positives - Type I - matching strings that should not match
+False negative - Type II - not matching strings that should match
 
 2. How do false positives and false negatives affect precision and recall
 
+Minimising false positives increases precision (also called precision)
+Minimising false negatives increases recall (also called coverage)
 
 3. Count the number of Types and Tokens in this sentence: “NLP is the art of analysing and understanding human languages by machines.”
 
