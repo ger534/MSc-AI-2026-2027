@@ -11,21 +11,33 @@ Minimising false negatives increases recall (also called coverage)
 
 3. Count the number of Types and Tokens in this sentence: “NLP is the art of analysing and understanding human languages by machines.”
 
-Token (every word): 12
+Professor Dan Jurafsky says that it is always important to explain our goals behind your counting. (https://www.youtube.com/watch?v=xsIDTmo1NOg&list=PLAUFqkTvH_MQ&index=3)
 
-Type ('non-repeated' words): 
+Normalising the multiword expression 'NLP' as 'Natural Language Processing', the sentence has
+
+Tokens (every word form): 14
+
+Types (lemmas): 13
+
+because language = languages = same stem/lemma. 
+
 
 4. Write a sample sentence containing a Fragment and a filled pause.
 
+A sentence with both disfluencies: "I do uh main- mainly business data processing"
+
+disfluency This utterance has two kinds of disfluencies. The broken-off word, where 'main-' is the fragment and 'uh'/'um' is the filler or filled pause. (chapter 2, section 2.1 of the book)
+
 
 5. Explain the difference between lemmatisation and stemming, and provide an example for each. 
-The stemming 
 
-I would describe lemmas like rules we can set up. For example NLP = Natural Language processing. Or counting the expression l' as the token 'le' in a French context. Stemming is detecting the token's root, to identify whether a token is a new vocabulary type or just an expression of an already known type. 
+Lemmatisation is the mapping of each token to a true morphological lemma, meaning, the linguistic root. Stemming is a simplified version of lemmatisation that consists in crudely chopping off thew affixes a token might have
+
+<!--I would describe lemmas like rules we can set up. For example NLP = Natural Language processing. Or counting the expression l' as the token 'le' in a French context. Stemming is detecting the token's root, to identify whether a token is a new vocabulary type or just an expression of an already known type.-->
 
 6. Explain overstemming and understemming errors with the help of an example.
 
-Overstemming 
+Overstemming would be 'chopping' more than necessary, for example a rule to remove all 's' characters (to leave cats = cat = same lemma), could also take the 's' characters from words such as 'was' (turning to 'wa') or this (turning to 'thi'). The opposite case would be 
 
 
 
