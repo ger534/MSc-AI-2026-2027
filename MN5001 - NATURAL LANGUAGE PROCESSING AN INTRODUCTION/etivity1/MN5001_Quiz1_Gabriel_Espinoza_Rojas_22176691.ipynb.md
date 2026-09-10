@@ -24,7 +24,7 @@ because language = languages = same stem/lemma.
 
 4. Write a sample sentence containing a Fragment and a filled pause.
 
-A sentence with both disfluencies: "I do uh main- mainly business data processing"
+A sentence with both disfluencies: "I do uh main- mainly motorway traffic data processing"
 
 disfluency This utterance has two kinds of disfluencies. The broken-off word, where 'main-' is the fragment and 'uh'/'um' is the filler or filled pause. (chapter 2, section 2.1 of the book)
 
