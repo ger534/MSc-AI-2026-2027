@@ -57,7 +57,7 @@ $$ P(want|i) =  \frac{count(i, want) + 1}{count(i) + 8} = \frac{828}{2541} = 0.3
 $$ P(to|want) =  \frac{count(want, to) + 1}{count(want) + 8} = \frac{609}{935} = 0.6513 $$
 $$ P(want|to) =  \frac{count(to, want) + 1}{count(to) + 8} = \frac{1}{2425} = 0.0004 $$
 
-$$ P'(i\ want\ to\ want) = 0.3259 * 0.6513 * 0.000412 \approx 8.57 \times 10^{-5}$$
+$$ P'(i\ want\ to\ want) = \frac{828}{2541} * \frac{609}{935} * \frac{1}{2425} \approx 8.752 \times 10^{-5}$$
 
 
 b. “i want to spend” 
