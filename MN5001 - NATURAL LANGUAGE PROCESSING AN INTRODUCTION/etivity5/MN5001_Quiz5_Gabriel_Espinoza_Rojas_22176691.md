@@ -1,85 +1,36 @@
 <b>1. With the help of an example explain why the Multinomial Naive Bayes Independent assumptions are incorrect.</b>
 
-<!-- There are TWO assumptions to cover, not one:
+The first assumption is about the concept around the input data ('Bag of Words'). The BoW by nature leaves no context from the original text. Relationships arise from frequency (unigrams). The probability of each class/sentiment/category is calculated with a unigram. "man bit dog" and "dog bit man" have the exact BoW representation, but it is evident these two sentences are very different. Assuming that position does not matter is incorrect.
 
-     (a) BAG OF WORDS - position doesn't matter. P(w|c) is the same whether the
-         word appears first or last.
-     (b) CONDITIONAL INDEPENDENCE - P(w1, w2, ..., wn | c) = P(w1|c) * P(w2|c) * ...
-         i.e. every word is independent of every other, given the class.
+A second assumption to make the computation more possible is to ignore the relationships other words would have with one another in a specific document given a class. The simplification here is to treat every word independent from one another. Not the same as the Markov assumption but similar. For my own sanity, I wanted to review what the difference was. 
 
-     Both are plainly false about language. Pick an example that breaks them:
-       - word order: "the dog bit the man" vs "the man bit the dog" - identical BoW
-       - dependence: in a GB document, seeing "London" makes "England" far more
-         likely than its standalone rate; the model treats them as unrelated
-       - collocations / n-grams generally: "New York", "not good"
-       - NEGATION is the sharpest one for sentiment: "not good" - BoW sees "good"
+In lesson 3 we had to calculate sentence probability with a 2-gram, assuming:
+$$P(not\ good) = P(not|<s>) * P(good|not) * P(</s>|good)$$
 
-     Then the punchline Jurafsky makes: despite the assumptions being wrong,
-     Naive Bayes works well in practice for classification, because it only needs
-     the ARGMAX to be right, not the probabilities themselves. -->
+And this is just one interpretation, the Markov assumption was about truncating the original text to different degrees (N-grams), trying to leave some of the context. But the independence assumption the multinomial NB makes words conditional to the class only:
+$$P(not\ good | c) =  P(not | c) * P(good | c)$$
 
+In this example, the classifier counts "not" and "good" as two independent pieces of evidence but in reality, they are strongly dependent, "not good" is clearly negative, but the classifier (with classes 'negative' and 'positive') will more likely account for 'good' as a positive element when doing $P(good | positive)$.
 
+However, multinomial Naive Bayes classifier turns out not to be so naive (Jurafsky mentions). Despite making incorrect assumptions, the classifier only needs the correct class to have the highest score.
+ 
 
-<b>2. Select the most appropriate stop words to be removed from the two bags of words (a.k.a word clouds) shown below; one per cloud. Words' font sizes are proportional to their frequency in the corpus.</b>
+<b>2. Select the most appropriate stop words to be removed, from the two bags of words (a.k.a word clouds) shown below; one per cloud. Words' font sizes are proportional to their frequency in the corpus.</b>
 
-<!-- One word per cloud.
+The clouds are another representation of what Dan calls bags of words. The Appendix B: Naive Bayes Classification (https://web.stanford.edu/~jurafsky/slp3/B.pdf), defines stop words as "a class of words that some systems decide to completely ignore". He adds that they are "very frequent words like 'the' and 'a'" and explains that a way they can be selected is "by sorting the vocabulary by frequency in the training set, and defining the top 10–100 vocabulary entries as stop words".
 
-     Cloud 2 (already stop-word filtered): content words only - climate, change,
-     global, warming, level, report, emissions, protocol, agreement... is the right answer about a word that is uninformative *for this corpus* rather than uninformative in general?
+Using this definition, from cloud 1: 'the' is the obvious answer. For cloud 2, because the stop words have already been removed I believe the matter becomes about the word that adds the least amount of information to the cloud. In this context, I would choose 'report'. However, if the same rule described in the book was applied, the procedure would pick the word 'climate'.
 
-     Justify the choice: highest frequency + lowest discriminative value. Tie it to
-     feature selection - a term appearing in every document carries no information
-     for distinguishing between documents. -->
-
-The clouds are another representation of that Dan calls bags of words.
-
-From cloud 1 I think 'the' is the obvious answer. It takes a lot of space and adds nothing to the cloud. 
-For cloud 2, because they are no stop words (https://youtu.be/Ge612JZGBMU?t=308) the matter becomes about the word that adds the least amount of information to the cloud. In this context, I believe it is: XXXX. 
-
+One last important note is that Jurafsky closes the explanation of stop words with  "In most text classification applications, however, using a stop word list doesn’t improve performance, and so it is more common to make use of the entire vocabulary and not use a stop word list".  (https://youtu.be/Ge612JZGBMU?t=308)
 
 <b>3. Given the four training documents in the table below, infer the class of the test document (doc #5). Show your work, i.e. computations of priors and conditional probabilities. [2 marks]</b>
 
-Training:
-| Doc | Words | Class |
-|-----|-------|-------|
-| 1 | London is the Capital of GB | GB |
-| 2 | Oxford is a city in GB | GB |
-| 3 | Dublin is the capital of Ireland | IE |
-| 4 | Limerick is a city in Ireland | IE |
-
-Test:
-| Doc | Words | Class |
-|-----|-------|-------|
-| 5 | University of Limerick Wolves | ? |
-
-<!-- NOTE: doc #5 here is "University of Limerick WOLVES" - one word longer than the E-tivity's test doc. Check which words are in the vocabulary.
-
-     MEGA-DOCUMENTS (lowercase, concatenated per class)
-       GB: london is the capital of gb oxford is a city in gb
-       IE: dublin is the capital of ireland limerick is a city in ireland
-
-     VOCABULARY
-       V = distinct words across BOTH classes;  |V| = ?
-
-     CONDITIONALS with add-one smoothing
-       P(w|c) = (count(w,c) + 1) / (total words in class c + |V|)
-       - denominator is TOTAL TOKENS in the class, not distinct words
-       - compute one line per word of doc 5 that is in V
-       - decide and STATE what you do with out-of-vocabulary words
-         (the usual convention: drop them, since they contribute the same
-         factor to both classes and cannot change the argmax)
-
-     CHOOSING A CLASS
-       P(IE|d5) ∝ P(IE) * prod P(w|IE)
-       P(GB|d5) ∝ P(GB) * prod P(w|GB)
-       argmax -> inferred class -->
-
 **Priors:**
-How many times does the class GB ocurrs in our training set out of the how many total documents are there in our training set?
+How many times does the class GB occurs in our training set out of the how many total documents are there in our training set?
 
 $$P(GB) = \frac{2}{4} = 0.5 $$
 
-How many times does the class IE ocurrs in our training set out of the how many total documents are there in our training set?
+How many times does the class IE occurs in our training set out of the how many total documents are there in our training set?
 $$P(IE) = \frac{2}{4} = 0.5 $$
 
 Considering what Jurafsky says about unknown words (words not present in the training docs), I'll remove the words University and Wolves https://youtu.be/Ge612JZGBMU?t=268
@@ -90,9 +41,9 @@ How many times is each word given each class in our training data.
 
 V = { London, is, the, Capital, of, GB, Oxford, a, city, in, Dublin, capital, Ireland, Limerick } [14]
 
-Taking Capital as equal to capital V = 13
+Taking 'Capital' as equal to 'capital' V = 13 (normalisation of the text).
 
-Building those mega-document Jurafsky mentions (https://youtu.be/Ge612JZGBMU?t=64)
+Building those mega-documents Jurafsky mentions (https://youtu.be/Ge612JZGBMU?t=64)
 
 count(GB) = 12 [london is the capital of gb oxford is a city in GB]
 
@@ -105,30 +56,24 @@ Class GB:
 
 <!--$$P(University | GB) = \frac{count(University, GB) + 1}{count(GB) + |V|} = \frac{0 + 1}{12 + 13} = \frac{0 + 1}{12 + 13} = \frac{1}{25} = 0.04$$-->
 
-$$ P(of | GB) =  \frac{count(of, GB) + 1}{count(GB) + |V|} = \frac{1 + 1}{12 + 13} = \frac{1 + 1}{12 + 13} = \frac{2}{25} = 0.08$$
+$$ P(of | GB) =  \frac{count(of, GB) + 1}{count(GB) + |V|} = \frac{1 + 1}{12 + 13} = \frac{2}{25} = 0.08$$
 
-$$ P(Limerick | GB) = \frac{count(Limerick, GB) + 1}{count(GB) + |V|} = \frac{0 + 1}{12 + 13} = \frac{0 + 1}{12 + 13} = \frac{1}{25} = 0.04$$
-
-<!--$$ P(Wolves | GB) = \frac{count(Wolves, GB) + 1}{count(GB) + |V|} = \frac{0 + 1}{12 + 13} = \frac{0 + 1}{12 + 13} = \frac{1}{25} = 0.04$$-->
+$$ P(Limerick | GB) = \frac{count(Limerick, GB) + 1}{count(GB) + |V|} = \frac{0 + 1}{12 + 13} = \frac{1}{25} = 0.04$$
 
 Class IE:
 
-<!--$$ P(University | IE) = \frac{count(University, IE) + 1}{count(IE) + |V|} = \frac{0 + 1}{12 + 13} = \frac{0 + 1}{12 + 13} = \frac{1}{25} = 0.04 $$-->
+$$ P(of | IE) = \frac{count(of, IE) + 1}{count(IE) + |V|} = \frac{1 + 1}{12 + 13} = \frac{2}{25} = 0.08$$
 
-$$ P(of | IE) = \frac{count(of, IE) + 1}{count(IE) + |V|} = \frac{1 + 1}{12 + 13} = \frac{1 + 1}{12 + 13} = \frac{2}{25} = 0.08$$
-
-$$ P(Limerick | IE) = \frac{count(Limerick, IE) + 1}{count(IE) + |V|} = \frac{1 + 1}{12 + 13} = \frac{1 + 1}{12 + 13} = \frac{2}{25} = 0.08$$
-
-<!--$$ P(Wolves | IE) = \frac{count(Wolves, IE) + 1}{count(IE) + |V|} = \frac{0 + 1}{12 + 13} = \frac{0 + 1}{12 + 13} = \frac{1}{25} = 0.04$$-->
+$$ P(Limerick | IE) = \frac{count(Limerick, IE) + 1}{count(IE) + |V|} = \frac{1 + 1}{12 + 13} = \frac{2}{25} = 0.08$$
 
 
 **Choosing a class:**
 
-Now we use the priors and likehoods to compute the probability of the test sentence being of class GB or IE.
+Now we use the priors and likelihoods to compute the probability of the test sentence being of class GB or IE.
 
-$$P(GB|d5) \propto \frac{2}{4} * \frac{2}{25} * \frac{1}{25} = 0.0016 $$
+$$P(GB|d5) \propto \frac{2}{4} * \frac{2}{25} * \frac{1}{25} \propto 0.0016 $$
 
-$$P(IE|d5) \propto \frac{2}{4} * \frac{2}{25} * \frac{2}{25} = 0.0032 $$
+$$P(IE|d5) \propto \frac{2}{4} * \frac{2}{25} * \frac{2}{25} \propto 0.0032 $$
 
 <!--The ∝ matters: these are unnormalised scores, not probabilities, because the P(d) denominator is dropped-->
 
