@@ -1,11 +1,24 @@
 1. Using an example, explain the difference between users' information needs and queries. [0.5]
 
-The book defines this difference as 
-"An *information need* is the topic about which the user desires to know more, and
-need is differentiated from a *query*, which is what the user conveys to the comquery puter in an attempt to communicate the information need"
+The book defines this difference as (https://api.pageplace.de/preview/DT0400.9780511410802_A24403865/preview-9780511410802_A24403865.pdf)
+"An *information need* is the topic about which the user desires to know more, and need is differentiated from a *query*, which is what the user conveys to the computer in an attempt to communicate the information need".
+
+Sticking to the book, an example taken from it:
+
+information need -> a user might desire to know more about Shakespeare’s plays, in particular, get a better understanding of the relationship between Brutus and Caesar. 
+
+that query would look something like: -> term 'Brutus' bitwise AND term 'Caesar'
 
 2. With the help of an example, show how query formulation could affect Precision and Recall. [0.5]
 
+Definitions from the book (https://api.pageplace.de/preview/DT0400.9780511410802_A24403865/preview-9780511410802_A24403865.pdf):
+
+Precision: What fraction of the returned results are relevant to the information need?
+
+Recall: What fraction of the relevant documents in the collection were returned by the system?
+
+
+"A general problem with Boolean search is that using and operators tends to produce high precision but low recall searches, while using or operators gives low precision but high recall searches, and it is difficult or impossible to find a satisfactory middle ground."
 
 
 3. What are the shortcomings of linear search via the Grep command for information retrieval? [0.5]
