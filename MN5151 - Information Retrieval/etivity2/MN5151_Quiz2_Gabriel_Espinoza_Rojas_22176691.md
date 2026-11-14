@@ -86,29 +86,37 @@ there might be about M = 500,000 distinct terms in these documents.
 4. What are the common preprocessing steps in creating an inverted index, and what is their impact on the search results [1]
 
 
-Recall the major steps in inverted index construction:
+Chapter 2 of the book ('The term vocabulary and postings lists' https://web.archive.org/web/20260101025339/https://nlp.stanford.edu/IR-book/pdf/irbookonlinereading.pdf) starts by summarising the whole IR pipeline for the inverted index (titled 'Inverted index construction' in video 7 3 The Inverted Index 10 42):
 1. Collect the documents to be indexed.
 2. Tokenize the text.
 3. Do linguistic preprocessing of tokens.
 4. Index the documents that each term occurs in.
 
+I believe the preprocessing steps that this question refers to are within steps 2 and 3 from this pipeline. The book defines the four following stages for determining the vocabulary of terms (titled 'initial stages of text processing' in video):
 
+Tokenization
+"Given a character sequence and a defined document unit, tokenization is the task of chopping it up into pieces, called tokens, perhaps at the same time throwing away certain characters, such as punctuation"
+impact on the search results:
+By how extensive this section is in the book (in comparison with the other 3), I'd say this is the one that impacts the most the search results. It decides what 'chopped' pieces make it into the rest of the pre-processing steps. For example, taking 'beginner's guide to C++' as the query, if the tokeniser method used decides to blindly strip all punctuation, the expression will become ['beginners', 'guide', 'to', 'C'], and if you are a programmer looking for C++ documentation, you would be disappointed if all the results were about the C language. 
 
-The book defines the four following stages for determining the vocabulary of terms (titled 'initial stages of text processing' in video 7 3 The Inverted Index 10 42 https://www.youtube.com/watch?v=Wf6HbY2PQDw):
+Normalization (equivalence classing of terms)
+"the process of canonicalizing tokens so that matches occur despite superficial differences in the character sequences of the tokens." (e.g. "USA" = "U.S.A.")
+impact on the search results:
+Here, the impact ties nicely with the concepts of precision and recall. Merging 'USA' and 'U.S.A.' raises recall. But it harms precision. For example if a construction worker is searching for 'C.A.T. equipment' and the results are about the animal 'cat', the worker might be rather upset.
+In my little experience as a data scientist, I must say, usually treating all terms as lowercase fixed many of the issues I've come across. However, the book mentions cases such as 'Windows' (the operating system) where even lowering the case would be harmful.
+Stemming and lemmatization (lemmatization is omitted in the video)
+"Stemming usually refers to a crude heuristic process that chops off the ends of words in the hope of achieving this goal correctly most of the time, and often includes the removal of derivational affixes" (the goal being to reduce different forms of a word to a common base form, that Professor Manning calls 'root')
 
-2.2.1 Tokenization
-Given a character sequence and a defined document unit, tokenization is the task of chopping it up into pieces, called tokens, perhaps at the same time
-throwing away certain characters, such as punctuation (i.e. "John's")
-
-2.2.3 Normalization (equivalence classing of terms)
-the process of canonicalizing tokens so that matches occur despite superficial differences in the character sequences of the tokens. (i.e. "USA" = "U.S.A.")
-
-2.2.4 Stemming and lemmatization (lemmatization is omitted in the video)
-Stemming usually refers to a crude heuristic process that chops off the ends of words in the hope of achieving this goal correctly most of the time, and often includes the removal of derivational affixes
-
-Lemmatization usually refers to doing things properly with the use of a vocabulary and morphological analysis of words, normally aiming to remove inflectional endings only and to return the base or dictionary form of a word, which is known as the lemma.
-
-2.2.2 Dropping common terms: stop words
-Very common words can be omitted entirely (i.e. "the", "of", "a")
-
-About the stop words, Professor Manning mentions in the video that wi
+"Lemmatization usually refers to doing things properly with the use of a vocabulary and morphological analysis of words, normally aiming to remove inflectional endings only and to return the base or dictionary form of a word, which is known as the lemma."
+impact on the search results:
+Similar to the previous example, stemming increases recall but lowers precision, direct quote from the book:
+"Stemming increases recall while harming precision"
+In the book we see Porter’s stemmer reducing words "operate", "operating" and "operational" to the same stem. So, a query about 'operational research' then also matches 'operating system' documents (dropping precision). 
+I reckon Professor Manning doesn't even refer to lemmatization probably due to the cost behind the morphological analysis. The book also mentions:
+"Getting better value from term normalization depends more on pragmatic issues of word use than on formal issues of linguistic morphology."
+Dropping common terms: stop words
+Very common words can be omitted entirely (e.g. "the", "of", "a")
+impact on the search results:
+Professor Manning mentions in the video in our modern world this might not be such a good idea anymore. He uses the example of a song-related search 'To Be Or Not To Be' where the stop words are crucial to a successful retrieval. That example in the book is called 'phrase searches', where the meaning is lost if stop words are dropped. But for 'keyword searches', the book explains, stop words tend to add little value to the query and dropping them is a valid approach. 
+One last important note (and maybe some peers remember this from intro to deep learning), these steps must be done to the corpus and the queries. Just like a few modules ago we had to do them for our training sets and our testing sets for things to make sense. If the preprocessing steps are only applied partially, then the results won't match the way we expect them.
+Regards,
